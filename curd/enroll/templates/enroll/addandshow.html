@@ -1,37 +1,45 @@
-{% extends "enroll/base.html" %}
-{% block content %}
+{% extends "enroll/base.html" %} {% block content %}
 <div class="row">
-    <div class="col-sm-4">
-        <h2 class="text-center alert alert-info">Add New Student</h2>
-        <form action="" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" class="btn btn-success" value="Add">
-        </form>
-    </div>
-    <div class="col-sm-8">
+  <div class="col-sm-4">
+    <h2 class="text-center alert alert-info">Add New Student</h2>
+    <form action="" method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <input type="submit" class="btn btn-success" value="Add" />
+    </form>
+  </div>
+    <div class="col-sm-7 offset-1">
         <h2 class="text-center alert alert-info">Show Student Details</h2>
         {% if stu %}
         <table class="table table-hover">
+        <tr>
+            {% comment %} <th scope="col">  </th> {% endcomment %}
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+            <th scope="col">Action</th>
+        </tr>
+        <tbody>
+            {% for s in stu %}
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Password</th>
-            </tr>
-            <tbody>
-            {% for student in students %}
-            <tr>
-                <th scope="row">{{st.id}}</th>
-                <td>{{ student.id }}</td>
-                <td>{{ student.name }}</td>
-                <td>{{ student.email }}</td>
-                <td>
-                    <a href="{% url 'edit' student.id %}" class="btn btn-primary">Edit</a>
-                    <a href="{% url 'delete' student.id %}" class="btn btn-danger">Delete</a>
-                </td>
+            <th scope="row">{{s.id}}</th>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.password }}</td>
+            <td>
+                <a href="{% url 'update_data' s.id %}" class="btn btn-primary btn-sm">Update</a>
+                <form action="{% url 'delete_data' s.id %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                </form>
             </tr>
             {% endfor %}
+        </tbody>
         </table>
+        {% else %}
+        <h2 class="text-center alert alert-danger">No Student Found</h2>
+        {% endif %}
+    </div>
 </div>
-{% endblock content %}
+{% endblock %}
+```
